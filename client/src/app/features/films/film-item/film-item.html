@@ -1,0 +1,18 @@
+<div class="film-card">
+  <img [src]="film.img" [alt]="film.title"/>
+
+  <div class="film-info">
+    <h3>{{ film.title }}</h3>
+
+    <div class="tags">
+      <span class="tag year">{{ film.year }}</span>
+      <span class="tag genre">{{ film.genre }}</span>
+    </div>
+
+    <p class="description">{{ film.description }}</p>
+
+    <button [routerLink]="">
+      View Details
+    </button>
+  </div>
+</div>

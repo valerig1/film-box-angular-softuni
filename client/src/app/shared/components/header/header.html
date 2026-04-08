@@ -1,4 +1,4 @@
-<mat-toolbar class="header">
+<mat-toolbar color="primary" class="header">
   <div class="logo" routerLink="/home">
     Film<span>Box</span>
   </div>
@@ -7,12 +7,13 @@
 
   <nav class="nav-links">
     <a mat-button routerLink="/catalog">Catalog</a>
-
-    <button mat-button>Logout</button>
-    <a mat-button routerLink="/create">Create</a>
-
-    <a mat-button routerLink="/login">Login</a>
-    <a mat-button routerLink="/register">Register</a>
-
+    
+    @if (isLoggedIn()) {
+      <a mat-button routerLink="films/create">Create</a>
+      <button mat-button (click)="logout()">Logout</button>
+    } @else {
+      <a mat-button routerLink="/login">Login</a>
+      <a mat-button routerLink="/register">Register</a>
+    }
   </nav>
 </mat-toolbar>

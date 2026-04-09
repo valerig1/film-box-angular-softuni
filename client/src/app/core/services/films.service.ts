@@ -14,6 +14,14 @@ export class FilmsService {
 
     constructor(private httpClient: HttpClient) {}
 
+    private getAuthToken(): string {
+        const token = this.authService.getAccessToken();
+        if (!token) {
+            throw new Error("User not authenticated");
+        }
+        return token;
+    }
+
     getFilms(): Observable<Film[]> {
         return this.httpClient.get<Film[]>(this.apiUrl);
     }
@@ -27,16 +35,34 @@ export class FilmsService {
     }
 
     createFilm(
-        title: string, year: number, genre: string, img: string, description: string): Observable<Film[]> {
-        const token = this.authService.getAccessToken();
+        title: string, year: number, genre: string, img: string, description: string): Observable<Film> {
+        const token = this.getAuthToken();
 
-        if (!token) {
-            throw new Error("User not authenticated");
-        }
-
-        return this.httpClient.post<Film[]>(
+        return this.httpClient.post<Film>(
             this.apiUrl,
             { title, year, genre, img, description },
             { headers: { 'X-Authorization': token } });
+    }
+
+    updateFilm(
+        id: string, 
+        title: string, 
+        year: number, 
+        genre: string, 
+        img: string, 
+        description: string): Observable<Film> {
+        
+        const token = this.getAuthToken();
+        
+        return this.httpClient.put<Film>(
+            `${this.apiUrl}/${id}`,
+            { title, year, genre, img, description },
+            { headers: { 'X-Authorization': token } });
+    }
+
+    deleteFilm(id: string): Observable<Film> {
+        const token = this.getAuthToken();
+
+        return this.httpClient.delete<Film>(`${this.apiUrl}/${id}`, { headers: { 'X-Authorization': token } });
     }
 }

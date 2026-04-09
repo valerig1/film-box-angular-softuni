@@ -1,0 +1,95 @@
+<div class="app-background">
+  <section class="edit-film">
+
+    <button class="back-btn" (click)="onCancel()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <h2>Edit Film</h2>
+
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label>Title</label>
+        <input 
+          type="text" 
+          name="title"
+          id="title"
+          formControlName="title" 
+          placeholder="Enter film title"/>
+      </div>
+
+       @if (showTitleError) {
+          <p class="error-message">
+              {{ titleErrorMessage }}
+          </p>
+      }
+
+      <div class="form-group">
+        <label>Year</label>
+        <input 
+          type="number" 
+          name="year"
+          id="year"
+          formControlName="year" 
+          placeholder="Enter release year (e.g., 2023)"/>
+      </div>
+
+      @if (showYearError) {
+          <p class="error-message">
+              {{ yearErrorMessage }}
+          </p>
+      }
+
+      <div class="form-group">
+        <label>Genre</label>
+        <select formControlName="genre">
+          <option value="" disabled>Select genre</option>
+          <option *ngFor="let g of genres" [value]="g">{{ g }}</option>
+        </select>
+      </div>
+
+      @if (showGenreError) {
+          <p class="error-message">
+              {{ genreErrorMessage }}
+          </p>
+      }
+
+      <div class="form-group">
+        <label>Image URL</label>
+        <input 
+          type="text" 
+          name="img"
+          id="img"
+          formControlName="img" 
+          placeholder="Enter image URL"/>
+      </div>
+
+      @if (showImgError) {
+          <p class="error-message">
+              {{ imgErrorMessage }}
+          </p>
+      }
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea 
+          rows="4" 
+          formControlName="description"
+          placeholder="Write a brief description of the film">
+        </textarea>
+      </div>
+      
+      @if (showDescriptionError) {
+          <p class="error-message">
+              {{ descriptionErrorMessage }}
+          </p>
+      }
+
+      <button [disabled]="editForm.invalid">
+        Edit Film
+      </button>
+
+    </form>
+  </section>
+</div>

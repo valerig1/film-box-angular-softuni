@@ -22,4 +22,12 @@ export const routes: Routes = [
         path: 'films/create',
         loadComponent: () => import('./features/films/create-film/create-film').then(c => c.CreateFilm)
     },
+    {
+        path: 'films/:id/details',
+        loadComponent: () => import('./features/films/film-details/film-details').then(c => c.FilmDetails)
+    },
+    {
+        path: 'films/:id/edit',
+        loadComponent: () => import('./features/films/edit-film/edit-film').then(c => c.EditFilm)
+    }  
 ];

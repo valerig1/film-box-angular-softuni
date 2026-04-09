@@ -11,7 +11,7 @@
 
     <p class="description">{{ film.description }}</p>
 
-    <button [routerLink]="">
+    <button [routerLink]="['/films', film._id, 'details']">
       View Details
     </button>
   </div>

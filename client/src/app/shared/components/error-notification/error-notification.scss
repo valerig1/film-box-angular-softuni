@@ -1,0 +1,50 @@
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 1000;
+
+  width: 320px;
+  padding: 16px;
+  border-radius: 8px;
+
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.35s ease-out;
+
+  &.error-message {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    border: 1px solid #b71c1c;
+  }
+
+  .message {
+    flex: 1;
+    text-align: left;
+  }
+}
+
+.error-icon {
+  font-size: 20px;
+  color: #fff;
+}

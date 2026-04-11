@@ -31,9 +31,7 @@ export class AuthService {
             tap(user => {
                 this._currentUser.set(user);
                 this._isLoggedIn.set(true);
-                localStorage.setItem('currentUser', JSON.stringify({
-                    accesToken: user.accessToken
-                }));
+                localStorage.setItem('currentUser', JSON.stringify(user));
             }))
     }
 
@@ -43,18 +41,12 @@ export class AuthService {
             tap(user => {
                 this._currentUser.set(user);
                 this._isLoggedIn.set(true);
-                localStorage.setItem('currentUser', JSON.stringify({
-                    accesToken: user.accessToken
-                }));
+                localStorage.setItem('currentUser', JSON.stringify(user));
             }))
     }
 
     logout(): Observable<void> {
-        const token = this.getAccessToken();
-
-        return this.httpClient.get<void>(`${this.apiUrl}/logout`, {
-            headers: { 'X-Authorization': `${token}` }
-        }).pipe(
+        return this.httpClient.get<void>(`${this.apiUrl}/logout`).pipe(
             tap(() => {
                 this._currentUser.set(null);
                 this._isLoggedIn.set(false);
@@ -64,7 +56,14 @@ export class AuthService {
     }
 
     getAccessToken(): string | null {
-        return this._currentUser()?.accessToken || null;
+        const savedUser = localStorage.getItem('currentUser');
+
+        if (savedUser) {
+            const user = JSON.parse(savedUser);
+            return user?.accessToken || null;
+        }
+
+        return null;
     }
 
     getCurrentUserId(): string | null {

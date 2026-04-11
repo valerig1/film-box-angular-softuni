@@ -21,8 +21,8 @@ export class Register {
       username: ['', [Validators.required, Validators.minLength(5)]],
       email: ['', [Validators.required, Validators.email]],
       passwords: this.formBuilder.group({
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        rePassword: ['', [Validators.required, Validators.minLength(6)]]
+        password: ['', [Validators.required, Validators.minLength(5)]],
+        rePassword: ['', [Validators.required, Validators.minLength(5)]]
       }, { validators: this.passwordMatchValidator })
     })
   }
@@ -89,7 +89,7 @@ export class Register {
     }
 
     if (this.password?.errors?.['minlength']) {
-      return 'Password must be at least 6 characters!';
+      return 'Password must be at least 5 characters!';
     }
 
     if (this.passwords?.errors?.['passwordMismatch']) {
@@ -105,7 +105,7 @@ export class Register {
     }
 
     if (this.rePassword?.errors?.['minlength']) {
-      return 'Confirm password must be at least 6 characters!';
+      return 'Confirm password must be at least 5 characters!';
     }
 
     if (this.passwords?.errors?.['passwordMismatch']) {
@@ -129,7 +129,6 @@ export class Register {
             this.router.navigate(['/home']);
           },
           error: (err) => {
-            alert(err.error.message);
             this.registerForm.reset(); 
             this.markFormGroupTouched();
           }

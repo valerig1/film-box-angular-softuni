@@ -32,7 +32,7 @@ export class EditFilm implements OnInit {
       year: ['', [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())]],
       genre: ['', [Validators.required]],
       img: ['', [Validators.required]],
-      description: ['', [Validators.required, Validators.minLength(5)]]
+      description: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(600)]]
     })
   }
 
@@ -150,6 +150,10 @@ export class EditFilm implements OnInit {
       return 'Description must be at least 5 characters!'
     }
 
+    if (this.description?.errors?.['maxlength']) {
+      return 'Description must not exceed 600 characters!'
+    }
+
     return '';
   }
 
@@ -165,7 +169,6 @@ export class EditFilm implements OnInit {
             this.router.navigate([`/films/${filmId}/details`]);
           },
           error: (err) => {
-            alert(err.error.message);
             this.editForm.reset();
             this.markFormGroupTouched();
           }

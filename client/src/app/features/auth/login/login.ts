@@ -19,7 +19,7 @@ export class Login {
   constructor() {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(5)]]
     })
   }
 
@@ -57,13 +57,13 @@ export class Login {
     }
 
     if (this.password?.errors?.['minlength']) {
-      return 'Password must be at least 6 characters!';
+      return 'Password must be at least 5 characters!';
     }
 
     return '';
   }
 
-  onSubmit(): void {;
+  onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
 
@@ -72,7 +72,6 @@ export class Login {
           this.router.navigate(['/home']);
         },
         error: (err) => {
-          alert(err.error.message);
           this.loginForm.reset();   
           this.markFormGroupTouched();
         }

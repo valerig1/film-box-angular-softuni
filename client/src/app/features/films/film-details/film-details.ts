@@ -36,7 +36,6 @@ export class FilmDetails implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isLoading = false;
-          alert(err.error?.message);
         }
       });
     }
@@ -61,9 +60,6 @@ export class FilmDetails implements OnInit, OnDestroy {
       this.filmService.deleteFilm(filmId).subscribe({
         next: () => {
           this.router.navigate(['/home']);
-        },
-        error: (err) => {
-          alert(err.error.message);
         }
       })
     }

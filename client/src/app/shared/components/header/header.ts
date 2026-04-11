@@ -21,9 +21,6 @@ export class Header {
     this.authService.logout().subscribe({
       next: () => {
         this.router.navigate(['/home']);
-      },
-      error: (err) => {
-        alert(err.error.message);
       }
     });
   }

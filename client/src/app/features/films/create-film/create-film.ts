@@ -29,7 +29,7 @@ export class CreateFilm {
       year: ['', [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())]],
       genre: ['', [Validators.required]],
       img: ['', [Validators.required]],
-      description: ['', [Validators.required, Validators.minLength(5)]]
+      description: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(600)]]
     })
   }
 
@@ -125,6 +125,10 @@ export class CreateFilm {
     if (this.description?.errors?.['minlength']) {
       return 'Description must be at least 5 characters!'
     }
+    
+    if (this.description?.errors?.['maxlength']) {
+      return 'Description must not exceed 600 characters!'
+    }
 
     return '';
   }
@@ -138,7 +142,6 @@ export class CreateFilm {
           this.router.navigate(['/home']);
         },
         error: (err) => {
-          alert(err.error.message);
           this.createForm.reset();
           this.markFormGroupTouched();
         }
@@ -154,5 +157,4 @@ export class CreateFilm {
       control?.markAsTouched();
     })
   }
-
 }

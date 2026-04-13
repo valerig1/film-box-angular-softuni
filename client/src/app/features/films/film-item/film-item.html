@@ -1,15 +1,15 @@
 <div class="film-card">
-  <img [src]="film.img" [alt]="film.title"/>
+  <img [src]="film.img" [alt]="film.title | titlecase"/>
 
   <div class="film-info">
-    <h3>{{ film.title }}</h3>
+    <h3>{{ film.title | titlecase }}</h3>
 
     <div class="tags">
       <span class="tag year">{{ film.year }}</span>
       <span class="tag genre">{{ film.genre }}</span>
     </div>
 
-    <p class="description">{{ film.description }}</p>
+    <p class="description">{{ film.description | capitalizeText | sliceText }}</p>
 
     <button [routerLink]="['/films', film._id, 'details']">
       View Details

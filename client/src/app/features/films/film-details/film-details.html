@@ -6,15 +6,15 @@
 
   @if (!isLoading && film) {
     <div class="film-card">
-      <img [src]="film.img" [alt]="film.title" />
+      <img [src]="film.img" [alt]="film.title | titlecase" />
 
       <div class="film-info">
-        <h2 class="film-title">{{ film.title }}</h2>
+        <h2 class="film-title">{{ film.title | titlecase}}</h2>
 
         <p><strong>Year:</strong> {{ film.year }}</p>
         <p><strong>Genre:</strong> {{ film.genre }}</p>
         <p><strong>Description:</strong></p>
-        <p class="description">{{ film.description }}</p>
+        <p class="description">{{ film.description | capitalizeText }}</p>
 
         @if (isLoggedIn() && currentUser()?._id === film._ownerId) {
             <div class="actions">

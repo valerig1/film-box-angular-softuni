@@ -3,10 +3,12 @@ import { AuthService, FilmsService } from '../../../core/services';
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { Film } from '../../../models';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { CapitalizeTextPipe } from '../../../shared/pipes';
 
 @Component({
   selector: 'app-film-details',
-  imports: [RouterModule, RouterLink],
+  imports: [RouterModule, RouterLink, CommonModule, CapitalizeTextPipe],
   templateUrl: './film-details.html',
   styleUrl: './film-details.scss',
 })

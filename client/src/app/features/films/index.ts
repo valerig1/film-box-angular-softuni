@@ -1,0 +1,5 @@
+export * from './film-item/film-item'
+export * from './latest-films/latest-films-board'
+export * from './create-film/create-film'
+export * from './film-details/film-details'
+export * from './edit-film/edit-film'

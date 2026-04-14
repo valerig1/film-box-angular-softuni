@@ -1,0 +1,19 @@
+<section class="film-board">
+  <h2>Your Favorite Films</h2>
+
+  <div class="films-grid">
+    @if (films$ | async; as films) {
+
+      @if (films.length > 0) {
+        @for (film of films; track film._id) {
+          <app-film-item [film]="film"></app-film-item>
+        }
+      } @else {
+        <p class="no-films">You haven't liked any films yet.</p>
+      }
+
+    } @else {
+      <div class="loader"></div>
+    }
+  </div>
+</section>

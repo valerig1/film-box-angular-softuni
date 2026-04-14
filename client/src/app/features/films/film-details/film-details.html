@@ -1,30 +1,54 @@
 <div class="film-details app-background">
 
-  @if (isLoading) {
-    <div class="loader"></div>
-  }
+	@if (isLoading) {
+	<div class="loader"></div>
+	}
 
-  @if (!isLoading && film) {
-    <div class="film-card">
-      <img [src]="film.img" [alt]="film.title | titlecase" />
+	@if (!isLoading && film) {
+	<div class="film-card">
+		<img [src]="film.img" [alt]="film.title | titlecase" />
 
-      <div class="film-info">
-        <h2 class="film-title">{{ film.title | titlecase}}</h2>
+		<div class="film-info">
+			<h2 class="film-title">{{ film.title | titlecase }}</h2>
 
-        <p><strong>Year:</strong> {{ film.year }}</p>
-        <p><strong>Genre:</strong> {{ film.genre }}</p>
-        <p><strong>Description:</strong></p>
-        <p class="description">{{ film.description | capitalizeText }}</p>
+			<p><strong>Year:</strong> {{ film.year }}</p>
+			<p><strong>Genre:</strong> {{ film.genre }}</p>
 
-        @if (isLoggedIn() && currentUser()?._id === film._ownerId) {
-            <div class="actions">
-              <button [routerLink]="['/films', film._id, 'edit']">Edit</button>
-              <button (click)="deleteFilmHandler()">Delete</button>
-              <button></button>
-            </div>
-        }
-      </div>
-    </div>
-  }
+			<p><strong>Description:</strong></p>
+			<p class="description">
+				{{ film.description | capitalizeText }}
+			</p>
 
+			<div class="likes-section">
+				<p><strong>Likes:</strong> {{ likesCount() }}</p>
+			</div>
+
+			<div class="actions">
+
+				@if (isLoggedIn() && currentUser()?._id === film._ownerId) {
+				<button [routerLink]="['/films', film._id, 'edit']">
+					Edit
+				</button>
+
+				<button (click)="deleteFilmHandler()">
+					Delete
+				</button>
+				}
+
+				@if (isLoggedIn() && currentUser()?._id !== film._ownerId) {
+
+				@if (!hasLiked()) {
+				<button (click)="likeHandler()" [disabled]="isProcessingLike()">
+					👍 Like
+				</button>
+				} @else {
+				<button (click)="unlikeHandler()">
+					💔 Unlike
+				</button>
+				}
+				}
+			</div>
+		</div>
+	</div>
+	}
 </div>

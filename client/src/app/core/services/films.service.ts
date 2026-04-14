@@ -1,55 +1,67 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { forkJoin, Observable, of } from "rxjs";
 import { Film } from "../../models";
 
 @Injectable({
-    providedIn: 'root'
+	providedIn: 'root'
 })
 
 export class FilmsService {
-    private apiUrl = 'http://localhost:3030/data/films';
+	private apiUrl = 'http://localhost:3030/data/films';
 
-    constructor(private httpClient: HttpClient) {}
+	constructor(private httpClient: HttpClient) { }
 
-    getFilms(): Observable<Film[]> {
-        return this.httpClient.get<Film[]>(this.apiUrl);
-    }
+	getFilms(): Observable<Film[]> {
+		return this.httpClient.get<Film[]>(this.apiUrl);
+	}
 
-    getFilmById(id: string): Observable<Film> {
-        return this.httpClient.get<Film>(`${this.apiUrl}/${id}`);
-    }
+	getFilmById(id: string): Observable<Film> {
+		return this.httpClient.get<Film>(`${this.apiUrl}/${id}`);
+	}
 
-    getLatestFilms(): Observable<Film[]> {
-        return this.httpClient.get<Film[]>(`${this.apiUrl}?sortBy=_createdOn%20desc&pageSize=5`);
-    }
+	getFilmsByIds(ids: string[]): Observable<Film[]> {
+		if (ids.length === 0) {
+			return of([]);
+		}
 
-    createFilm(
-        title: string, 
-        year: number, 
-        genre: string, 
-        img: string, 
-        description: string): Observable<Film> {
+		const query = encodeURIComponent(
+			`_id IN (${ids.map(id => `"${id}"`).join(',')})`
+		);
 
-        return this.httpClient.post<Film>(
-            this.apiUrl,
-            { title, year, genre, img, description });
-    }
+		return this.httpClient.get<Film[]>(`${this.apiUrl}?where=${query}`);
+	}
 
-    updateFilm(
-        id: string, 
-        title: string, 
-        year: number, 
-        genre: string, 
-        img: string, 
-        description: string): Observable<Film> {
-                
-        return this.httpClient.put<Film>(
-            `${this.apiUrl}/${id}`,
-            { title, year, genre, img, description });
-    }
+	getLatestFilms(): Observable<Film[]> {
+		return this.httpClient.get<Film[]>(`${this.apiUrl}?sortBy=_createdOn%20desc&pageSize=5`);
+	}
 
-    deleteFilm(id: string): Observable<Film> {
-        return this.httpClient.delete<Film>(`${this.apiUrl}/${id}`);
-    }
+	createFilm(
+		title: string,
+		year: number,
+		genre: string,
+		img: string,
+		description: string): Observable<Film> {
+
+		return this.httpClient.post<Film>(
+			this.apiUrl,
+			{ title, year, genre, img, description });
+	}
+
+	updateFilm(
+		id: string,
+		title: string,
+		year: number,
+		genre: string,
+		img: string,
+		description: string): Observable<Film> {
+
+		return this.httpClient.put<Film>(
+			`${this.apiUrl}/${id}`,
+			{ title, year, genre, img, description });
+	}
+
+	deleteFilm(id: string): Observable<void> {
+		return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
+	}
 }

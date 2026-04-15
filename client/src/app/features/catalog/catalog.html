@@ -1,0 +1,51 @@
+<div class="catalog app-background">
+
+  <div class="catalog-header">
+
+    <h2 class="page-title">Catalog</h2>
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        placeholder="Search..."
+        (input)="onSearchChange($any($event.target).value)"
+      />
+
+      <select
+        class="search-mode"
+        (change)="onSearchModeChange($any($event.target).value)"
+        [value]="searchMode()"
+      >
+        <option value="title">Title</option>
+        <option value="genre">Genre</option>
+      </select>
+
+    </div>
+
+    <select
+      (change)="onSortChange($any($event.target).value)"
+      [value]="sort()"
+    >
+      <option value="recent">Recent</option>
+      <option value="oldest">Oldest</option>
+      <option value="year-new">Newest Year</option>
+      <option value="year-old">Oldest Year</option>
+    </select>
+
+  </div>
+
+  <div class="films-grid">
+
+    @if (filteredAndSortedFilms.length > 0) {
+      @for (film of filteredAndSortedFilms; track film._id) {
+        <app-film-item [film]="film"></app-film-item>
+      }
+    } @else {
+      <div class="empty-state">
+				<p>No films found.</p>
+			</div>
+    }
+
+  </div>
+</div>

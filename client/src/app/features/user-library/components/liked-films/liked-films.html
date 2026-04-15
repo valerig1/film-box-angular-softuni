@@ -1,0 +1,24 @@
+<div class="liked-films">
+
+  @if (films$ | async; as films) {
+
+  @if (films.length > 0) {
+  <div class="films-grid">
+    @for (film of films; track film._id) {
+    <app-film-item [film]="film"></app-film-item>
+    }
+  </div>
+  } @else {
+  <div class="empty-state">
+    <h3>No liked films</h3>
+    <p>You haven't liked any films yet.</p>
+  </div>
+  }
+
+  } @else {
+  <div class="loader">
+    <p>Loading liked films...</p>
+  </div>
+  }
+  
+</div>

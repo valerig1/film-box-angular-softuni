@@ -9,6 +9,7 @@
     <a mat-button routerLink="films/catalog">Catalog</a>
     
     @if (isLoggedIn()) {
+      <a mat-button routerLink="/library">Library</a>
       <a mat-button routerLink="films/create">Create</a>
       <button mat-button (click)="logout()">Logout</button>
     } @else {

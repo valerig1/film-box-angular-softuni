@@ -20,6 +20,10 @@ export const routes: Routes = [
 		loadComponent: () => import('./features/auth/register/register').then(c => c.Register)
 	},
 	{
+		path: 'library',
+		loadComponent: () => import('./features/user-library/user-library').then(c => c.UserLibrary)
+	},
+	{
 		path: 'films/create',
 		loadComponent: () => import('./features/films/create-film/create-film').then(c => c.CreateFilm)
 	},

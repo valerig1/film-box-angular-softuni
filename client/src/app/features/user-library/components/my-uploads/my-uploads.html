@@ -1,0 +1,25 @@
+<div class="uploads">
+
+  @if (films$ | async; as films) {
+
+  @if (films.length > 0) {
+  <div class="films-grid">
+    @for (film of films; track film._id) {
+    <app-film-item [film]="film"></app-film-item>
+    }
+  </div>
+  } @else {
+  <div class="empty-state">
+    <h3>No uploads yet</h3>
+    <p>You haven't added any films yet.</p>
+    <a routerLink="/films/create" class="cta-btn">Add your first film</a>
+  </div>
+  }
+
+  } @else {
+  <div class="loader">
+    <p>Loading your films...</p>
+  </div>
+  }
+
+</div>

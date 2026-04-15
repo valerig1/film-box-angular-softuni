@@ -1,0 +1,26 @@
+.library {
+  padding: 40px;
+  color: #fff;
+  min-height: calc(100vh - 120px);
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.tabs button {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: none;
+  background: #1e1e1e;
+  color: #aaa;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tabs button.active {
+  background: #ff3c3c;
+  color: white;
+}

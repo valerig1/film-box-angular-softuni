@@ -1,0 +1,27 @@
+<div class="library app-background ">
+
+  <div class="tabs">
+    <button
+      (click)="setTab('uploads')"
+      [class.active]="activeTab() === 'uploads'"
+    >
+      My Uploads
+    </button>
+
+    <button
+      (click)="setTab('likes')"
+      [class.active]="activeTab() === 'likes'"
+    >
+      Liked Films
+    </button>
+  </div>
+
+  @if (activeTab() === 'uploads') {
+    <app-my-uploads />
+  }
+
+  @if (activeTab() === 'likes') {
+    <app-liked-films />
+  }
+
+</div>

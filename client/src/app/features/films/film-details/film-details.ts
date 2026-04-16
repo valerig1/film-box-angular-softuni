@@ -5,10 +5,12 @@ import { Film, Like } from '../../../models';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CapitalizeTextPipe } from '../../../shared/pipes';
+import { FilmComments } from '../film-comments/film-comments';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
 	selector: 'app-film-details',
-	imports: [RouterModule, RouterLink, CommonModule, CapitalizeTextPipe],
+	imports: [RouterModule, RouterLink, CommonModule, FilmComments, CapitalizeTextPipe, MatIcon],
 	templateUrl: './film-details.html',
 	styleUrl: './film-details.scss',
 })

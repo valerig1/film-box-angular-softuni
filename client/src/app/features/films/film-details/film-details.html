@@ -1,54 +1,95 @@
 <div class="film-details app-background">
 
-	@if (isLoading) {
-	<div class="loader"></div>
-	}
+  @if (isLoading) {
+    <div class="loader"></div>
+  }
 
-	@if (!isLoading && film) {
-	<div class="film-card">
-		<img [src]="film.img" [alt]="film.title | titlecase" />
+  @if (!isLoading && film) {
+		<div class="wrapper">
+			<div class="top">
 
-		<div class="film-info">
-			<h2 class="film-title">{{ film.title | titlecase }}</h2>
+				<div class="poster">
+					<img [src]="film.img" [alt]="film.title" />
+				</div>
 
-			<p><strong>Year:</strong> {{ film.year }}</p>
-			<p><strong>Genre:</strong> {{ film.genre }}</p>
+				<div class="info">
 
-			<p><strong>Description:</strong></p>
-			<p class="description">
-				{{ film.description | capitalizeText }}
-			</p>
+					<h1 class="title">
+						{{ film.title | titlecase }}
+					</h1>
 
-			<div class="likes-section">
-				<p><strong>Likes:</strong> {{ likesCount() }}</p>
+					<div class="meta">
+
+						<div class="meta-item">
+							<div class="label">Year</div>
+							<div class="value">{{ film.year }}</div>
+						</div>
+
+						<div class="meta-item">
+							<div class="label">Genre</div>
+							<div class="value">{{ film.genre }}</div>
+						</div>
+
+						<div class="meta-item">
+							<div class="label">Description</div>
+							<div class="value desc">
+								{{ film.description | capitalizeText }}
+							</div>
+						</div>
+
+						<div class="meta-item">
+							<div class="label">Uploaded</div>
+							<div class="value date">
+								{{ film._createdOn | date:'mediumDate' }}
+							</div>
+						</div>
+
+					</div>
+
+					<div class="actions">
+						@if (isLoggedIn() && currentUser()?._id === film._ownerId) {
+							<button [routerLink]="['/films', film._id, 'edit']">Edit</button>
+							<button (click)="deleteFilmHandler()">Delete</button>
+						}
+					</div>
+
+				</div>
+
+				<div class="likes-badge">
+
+					@if (isLoggedIn() && currentUser()?._id !== film._ownerId) {
+
+						@if (!hasLiked()) {
+							<button class="like-btn" (click)="likeHandler()">
+								<mat-icon class="icon">thumb_up_off_alt</mat-icon>
+								<span class="count">{{ likesCount() }}</span>
+							</button>
+						} @else {
+							<button class="like-btn liked" (click)="unlikeHandler()">
+								<mat-icon class="icon">thumb_up</mat-icon>
+								<span class="count">{{ likesCount() }}</span>
+							</button>
+						}
+
+					} @else {
+
+						<div class="like-view">
+							<mat-icon class="icon">thumb_up</mat-icon>
+							<span class="count">{{ likesCount() }}</span>
+						</div>
+
+					}
+
+				</div>
 			</div>
 
-			<div class="actions">
-
-				@if (isLoggedIn() && currentUser()?._id === film._ownerId) {
-				<button [routerLink]="['/films', film._id, 'edit']">
-					Edit
-				</button>
-
-				<button (click)="deleteFilmHandler()">
-					Delete
-				</button>
-				}
-
-				@if (isLoggedIn() && currentUser()?._id !== film._ownerId) {
-
-				@if (!hasLiked()) {
-				<button (click)="likeHandler()" [disabled]="isProcessingLike()">
-					👍 Like
-				</button>
-				} @else {
-				<button (click)="unlikeHandler()">
-					💔 Unlike
-				</button>
-				}
-				}
+			<div>
+				<app-film-comments
+					[filmId]="film._id"
+					[filmOwnerId]="film._ownerId">
+				</app-film-comments>
 			</div>
+
 		</div>
-	</div>
-	}
+		}
 </div>

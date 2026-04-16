@@ -1,0 +1,39 @@
+<div class="comments-section">
+
+  <h3>Comments</h3>
+
+  @if (authService.isLoggedIn() && canComment()) {
+    <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+
+      <textarea
+        formControlName="content"
+        placeholder="Write a comment...">
+      </textarea>
+
+      @if (showContentError) {
+        <p class="error-message">{{ contentErrorMessage }}</p>
+      }
+
+      <button [disabled]="commentForm.invalid">
+        Post Comment
+      </button>
+
+    </form>
+  }
+
+  <div class="comments-list">
+
+    @for (comment of comments; track comment._id) {
+      <div class="comment">
+        <strong class="username">{{ comment.username }}:</strong>
+        <span class="text">{{ comment.content }}</span>
+      </div>
+    }
+
+    @if (comments.length === 0) {
+      <p class="empty">No comments yet</p>
+    }
+
+  </div>
+
+</div>

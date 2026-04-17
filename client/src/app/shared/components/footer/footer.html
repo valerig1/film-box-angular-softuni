@@ -2,15 +2,19 @@
 
   <div class="footer-content">
 
-    <div class="brand">
+    <a class="logo" routerLink="/home">
       Film<span>Box</span>
-    </div>
+    </a>
 
     <nav class="footer-links">
-      <a routerLink="/home">Home</a>
-      <a routerLink="/catalog">Catalog</a>
-      <a routerLink="/login">Login</a>
-      <a routerLink="/register">Register</a>
+      <a routerLink="films/catalog">Catalog</a>
+      @if (isLoggedIn()) {
+        <a mat-button routerLink="/library">Library</a>
+
+      } @else {
+        <a routerLink="/login">Login</a>
+        <a routerLink="/register">Register</a>
+      }
     </nav>
 
     <p class="copyright">

@@ -41,11 +41,12 @@ export class FilmsService {
 		year: number,
 		genre: string,
 		img: string,
-		description: string): Observable<Film> {
+		description: string,
+		ownerUsername: string): Observable<Film> {
 
 		return this.httpClient.post<Film>(
 			this.apiUrl,
-			{ title, year, genre, img, description });
+			{ title, year, genre, img, description, _ownerUsername: ownerUsername });
 	}
 
 	updateFilm(
@@ -54,11 +55,12 @@ export class FilmsService {
 		year: number,
 		genre: string,
 		img: string,
-		description: string): Observable<Film> {
+		description: string,
+		ownerUsername: string): Observable<Film> {
 
 		return this.httpClient.put<Film>(
 			`${this.apiUrl}/${id}`,
-			{ title, year, genre, img, description });
+			{ title, year, genre, img, description, _ownerUsername: ownerUsername });
 	}
 
 	deleteFilm(id: string): Observable<void> {

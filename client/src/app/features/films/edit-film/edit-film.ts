@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FilmsService } from '../../../core/services';
+import { AuthService, FilmsService } from '../../../core/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class EditFilm implements OnInit {
   protected filmService = inject(FilmsService);
+  protected authService = inject(AuthService);
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -49,9 +50,6 @@ export class EditFilm implements OnInit {
             img: film.img,
             description: film.description
           });
-        },
-        error: (err) => {
-          alert('Error fetching film data: ' + err.error.message);
         }
       });
     }
@@ -160,11 +158,16 @@ export class EditFilm implements OnInit {
   onSubmit(): void {
     if (this.editForm.valid) {
       const { title, year, genre, img, description } = this.editForm.value;
-
       const filmId = this.getFilmIdFromRoute();
+      const user = this.authService.currentUser();
+
+      if (!user) {
+        this.router.navigate(['/login']);
+        return;
+      }
 
       if (filmId) {
-        this.filmService.updateFilm(filmId, title, year, genre, img, description).subscribe({
+        this.filmService.updateFilm(filmId, title, year, genre, img, description, user.username).subscribe({
           next: () => {
             this.router.navigate([`/films/${filmId}/details`]);
           },

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FilmsService } from '../../../core/services';
+import { AuthService, FilmsService } from '../../../core/services';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CreateFilm {
   protected filmService = inject(FilmsService);
+  protected authService = inject(AuthService);
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
 
@@ -136,8 +137,14 @@ export class CreateFilm {
   onSubmit(): void {
     if (this.createForm.valid) {
       const { title, year, genre, img, description } = this.createForm.value;
+      const user = this.authService.currentUser();
 
-      this.filmService.createFilm(title, year, genre, img, description).subscribe({
+      if (!user) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      this.filmService.createFilm(title, year, genre, img, description, user.username).subscribe({
         next: () => {
           this.router.navigate(['/home']);
         },

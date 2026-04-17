@@ -9,7 +9,6 @@
   height: 64px;
 
   background: #0f0f0f;
-
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
   &::after {
@@ -49,32 +48,89 @@
     align-items: center;
     gap: 18px;
 
-    a,
-    button {
+    a {
       color: #bbb;
       font-size: 0.95rem;
-      transition: all 0.2s ease;
+      background: transparent !important;
+      border: none;
+      cursor: pointer;
       position: relative;
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0%;
+        height: 2px;
+        background: #ff3c3c;
+        transition: width 0.2s ease;
+      }
+
+      &:hover::after {
+        width: 100%;
+      }
+
+      &:hover {
+        color: #fff;
+      }
     }
 
-    a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0%;
-      height: 2px;
-      background: #ff3c3c;
-      transition: width 0.2s ease;
-    }
+    .user-link {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer; 
 
-    a:hover::after {
-      width: 100%;
-    }
+      .user-name {
+        margin-right: 4px;
+      }
 
-    a:hover,
-    button:hover {
-      color: #fff;
+      .arrow-trigger {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .arrow-icon {
+        font-size: 18px;
+        opacity: 0.85;
+        transition: transform 0.2s ease;
+        transform: translateY(3.5px);
+      }
+
+      .arrow-trigger:hover .arrow-icon {
+        color: #fff;
+      }
     }
+  }
+}
+
+::ng-deep .mat-mdc-button-base,
+::ng-deep .mat-mdc-button-base:hover,
+::ng-deep .mat-mdc-button-base:focus {
+  background: transparent !important;
+}
+
+::ng-deep .mat-mdc-button-ripple,
+::ng-deep .mat-mdc-button-persistent-ripple {
+  display: none !important;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  background: #151515 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  margin-left: 6px;
+  transform-origin: top right !important;
+}
+
+::ng-deep .mat-mdc-menu-item {
+  color: #ddd !important;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: rgba(255, 60, 60, 0.12) !important;
+    color: #fff !important;
   }
 }

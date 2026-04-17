@@ -7,11 +7,35 @@
 
   <nav class="nav-links">
     <a mat-button routerLink="films/catalog">Catalog</a>
-    
+
     @if (isLoggedIn()) {
       <a mat-button routerLink="/library">Library</a>
       <a mat-button routerLink="films/create">Create</a>
-      <button mat-button (click)="logout()">Logout</button>
+
+      <a mat-button class="user-link">
+        <span class="user-name">
+          Welcome, {{ currentUser()?.username }}
+        </span>
+
+        <span
+          class="arrow-trigger"
+          [matMenuTriggerFor]="userMenu"
+        >
+          <mat-icon class="arrow-icon">expand_more</mat-icon>
+        </span>
+      </a>
+
+      <mat-menu
+        #userMenu="matMenu"
+        xPosition="after"
+        yPosition="below"
+        [overlapTrigger]="false"
+      >
+        <button mat-menu-item (click)="logout()">
+          Logout
+        </button>
+      </mat-menu>
+
     } @else {
       <a mat-button routerLink="/login">Login</a>
       <a mat-button routerLink="/register">Register</a>

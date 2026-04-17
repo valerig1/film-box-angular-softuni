@@ -3,10 +3,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
-  imports: [MatToolbarModule, MatButtonModule, RouterModule],
+  imports: [MatToolbarModule, MatButtonModule, MatMenuModule, MatIconModule, RouterModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -24,5 +26,4 @@ export class Header {
       }
     });
   }
-
 }

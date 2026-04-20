@@ -1,6 +1,7 @@
 .footer {
-  margin-top: 80px;
-  padding: 30px 20px;
+  margin-top: 0;
+  padding-top: 30px;
+  padding-bottom: 15px;
 
   background: #0f0f0f;
   color: #bbb;
@@ -17,12 +18,10 @@
     transform: translateX(-50%);
     width: 40%;
     height: 2px;
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgba(255, 60, 60, 0.6),
-      transparent
-    );
+    background: linear-gradient(to right,
+        transparent,
+        rgba(255, 60, 60, 0.6),
+        transparent);
   }
 
   .footer-content {
@@ -31,11 +30,13 @@
     text-align: center;
   }
 
-  .brand {
+  .logo {
     font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 10px;
     color: #fff;
+    text-decoration: none;
+    cursor: pointer;
 
     span {
       color: #ff3c3c;

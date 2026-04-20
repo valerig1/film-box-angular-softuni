@@ -2,7 +2,7 @@
   <img [src]="film.img" [alt]="film.title | titlecase"/>
 
   <div class="film-info">
-    <h3>{{ film.title | titlecase }}</h3>
+    <h3>{{ film.title | titlecase | sliceText:15 }}</h3>
 
     <div class="tags">
       <span class="tag year">{{ film.year }}</span>

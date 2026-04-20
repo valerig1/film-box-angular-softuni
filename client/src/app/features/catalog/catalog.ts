@@ -53,7 +53,7 @@ export class Catalog implements OnInit, OnDestroy {
         );
       } else {
         result = result.filter(f =>
-          f.genre.toLowerCase().includes(searchValue)
+          f.genre.toLowerCase().startsWith(searchValue)
         );
       }
     }

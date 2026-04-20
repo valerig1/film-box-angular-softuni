@@ -1,19 +1,21 @@
-<div class="library app-background ">
+<div class="library app-background">
 
-  <div class="tabs">
-    <button
-      (click)="setTab('uploads')"
-      [class.active]="activeTab() === 'uploads'"
-    >
-      My Uploads
-    </button>
+  <div class="library-header">
 
-    <button
-      (click)="setTab('likes')"
-      [class.active]="activeTab() === 'likes'"
-    >
-      Liked Films
-    </button>
+    <h2 class="page-title">
+      My Library
+    </h2>
+
+    <div class="tabs">
+      <button (click)="setTab('uploads')" [class.active]="activeTab() === 'uploads'">
+        My Uploads
+      </button>
+
+      <button (click)="setTab('likes')" [class.active]="activeTab() === 'likes'">
+        Liked Films
+      </button>
+    </div>
+
   </div>
 
   @if (activeTab() === 'uploads') {

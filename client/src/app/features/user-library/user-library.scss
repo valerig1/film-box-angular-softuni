@@ -4,23 +4,46 @@
   min-height: calc(100vh - 120px);
 }
 
+.library-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 45px;
+}
+
+.page-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
 .tabs {
   display: flex;
   gap: 10px;
-  margin-bottom: 25px;
 }
 
 .tabs button {
   padding: 10px 16px;
   border-radius: 20px;
   border: none;
+
   background: #1e1e1e;
   color: #aaa;
+
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.2s ease;
+}
+
+.tabs button:hover {
+  color: #fff;
+  background: #2a2a2a;
 }
 
 .tabs button.active {
   background: #ff3c3c;
-  color: white;
+  color: #fff;
 }

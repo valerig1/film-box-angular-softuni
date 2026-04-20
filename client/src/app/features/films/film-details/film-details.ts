@@ -142,7 +142,7 @@ export class FilmDetails implements OnInit, OnDestroy {
 			this.subscriptions.push(
 				this.filmsService.deleteFilm(this.filmId).subscribe({
 					next: () => {
-						this.router.navigate(['/home']);
+						this.router.navigate(['/films/catalog']);
 					}
 				})
 			)

@@ -76,51 +76,5 @@
         cursor: pointer;
       }
     }
-
-    button {
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-
-      background: linear-gradient(135deg, #ff3c3c, #ff0066);
-      color: #fff;
-
-      font-weight: bold;
-      font-size: 0.95rem;
-      cursor: pointer;
-
-      transition: all 0.25s ease;
-
-      &:hover {
-        background: linear-gradient(135deg, #e63636, #e60057);
-      }
-
-      &:disabled {
-        background: #444;
-        color: #999;
-        opacity: 0.7;
-        cursor: not-allowed;
-      }
-    }
-  }
-}
-
-.error-message {
-  margin-top: 1px;
-  margin-bottom: 6px;
-
-  font-size: 12px;
-  color: #ff5c5c;
-
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  padding-left: 2px;
-
-  &::before {
-    content: "•";
-    font-size: 16px;
-    line-height: 1;
   }
 }

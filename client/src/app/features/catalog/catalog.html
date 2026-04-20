@@ -2,13 +2,13 @@
 
   <div class="catalog-header">
 
-    <h2 class="page-title">Catalog</h2>
+    <h2 class="page-title">Films</h2>
 
     <div class="search-box">
 
       <input
         type="text"
-        placeholder="Search..."
+        placeholder="Search catalog..."
         (input)="onSearchChange($any($event.target).value)"
       />
 
@@ -42,9 +42,7 @@
         <app-film-item [film]="film"></app-film-item>
       }
     } @else {
-      <div class="empty-state">
-				<p>No films found.</p>
-			</div>
+      <div class="loader"></div>
     }
 
   </div>

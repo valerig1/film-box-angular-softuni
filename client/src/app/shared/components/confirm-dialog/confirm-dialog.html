@@ -1,0 +1,19 @@
+<div class="dialog-wrapper">
+
+  <h2 class="title">{{ data.title }}</h2>
+
+  <p class="message">
+    {{ data.message }}
+  </p>
+
+  <div class="actions">
+    <button class="btn cancel" (click)="onCancel()">
+      Cancel
+    </button>
+
+    <button class="btn delete" (click)="onConfirm()">
+      Delete
+    </button>
+  </div>
+
+</div>

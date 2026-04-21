@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { CapitalizeTextPipe } from '../../../shared/pipes';
 import { FilmComments } from '../film-comments/film-comments';
 import { MatIcon } from '@angular/material/icon';
+import { ConfirmDialog } from '../../../shared/components';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-film-details',
@@ -23,6 +25,7 @@ export class FilmDetails implements OnInit, OnDestroy {
 	private route = inject(ActivatedRoute);
 	private router = inject(Router);
 	private changeDetectorRef = inject(ChangeDetectorRef);
+	private dialog = inject(MatDialog);
 
 	private subscriptions: Subscription[] = [];
 	private filmId: string | null = null;
@@ -132,21 +135,30 @@ export class FilmDetails implements OnInit, OnDestroy {
 	}
 
 	deleteFilmHandler(): void {
-		const isConfirmed = confirm(`Are you sure you want to delete this film: ${this.film?.title}`);
-
-		if (!isConfirmed) {
+		if (!this.filmId || !this.film) {
 			return;
 		}
 
-		if (this.filmId) {
-			this.subscriptions.push(
-				this.filmsService.deleteFilm(this.filmId).subscribe({
-					next: () => {
-						this.router.navigate(['/films/catalog']);
-					}
-				})
-			)
-		}
+		const dialogRef = this.dialog.open(ConfirmDialog, {
+			data: {
+				title: 'Delete Film',
+				message: `Are you sure you want to delete "${this.film?.title}"?`
+			}
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+				return;
+			}
+
+      this.subscriptions.push(
+        this.filmsService.deleteFilm(this.filmId!).subscribe({
+          next: () => {
+            this.router.navigate(['/films/catalog']);
+          }
+        })
+      );
+    });
 	}
 
 	ngOnDestroy(): void {

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AuthService, FilmsService } from '../../../core/services';
+import { AuthService, FilmsService, FormService } from '../../../core/services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Film } from '../../../models';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,8 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 export class EditFilm implements OnInit {
   protected filmService = inject(FilmsService);
   protected authService = inject(AuthService);
+  protected formService = inject(FormService);
   private router = inject(Router);
-  private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
 
   editForm: FormGroup;
@@ -28,31 +28,31 @@ export class EditFilm implements OnInit {
   ];
 
   constructor() {
-    this.editForm = this.formBuilder.group({
-      title: ['', [Validators.required, Validators.minLength(2)]],
-      year: ['', [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())]],
-      genre: ['', [Validators.required]],
-      img: ['', [Validators.required]],
-      description: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(600)]]
-    })
+    this.editForm = this.formService.createFilmForm();
   }
 
   ngOnInit(): void {
     const filmId = this.getFilmIdFromRoute();
 
-    if (filmId) {
-      this.filmService.getFilmById(filmId).subscribe({
-        next: (film: Film) => {   
-          this.editForm.patchValue({
-            title: film.title,
-            year: film.year,
-            genre: film.genre,
-            img: film.img,
-            description: film.description
-          });
-        }
-      });
+    if (!filmId) {
+      this.router.navigate(['/home']);
+      return;
     }
+
+    this.filmService.getFilmById(filmId).subscribe({
+      next: (film: Film) => {
+        this.editForm.patchValue({
+          title: film.title,
+          year: film.year,
+          genre: film.genre,
+          img: film.img,
+          description: film.description
+        });
+      },
+      error: () => {
+        this.router.navigate([`/films/${filmId}/details`]);
+      }
+    });
   }
 
   get title(): AbstractControl<any, any> | null {
@@ -117,7 +117,7 @@ export class EditFilm implements OnInit {
     }
 
     if (this.year?.errors?.['max']) {
-      return 'Year cannot be later than 2026!'
+      return `Year cannot be later than ${this.formService.maxYear}!`
     }
 
     return '';
@@ -167,32 +167,33 @@ export class EditFilm implements OnInit {
       }
 
       if (filmId) {
-        this.filmService.updateFilm(filmId, title, year, genre, img, description, user.username).subscribe({
-          next: () => {
-            this.router.navigate([`/films/${filmId}/details`]);
-          },
-          error: (err) => {
-            this.editForm.reset();
-            this.markFormGroupTouched();
-          }
-        });
+        this.filmService.updateFilm(
+          filmId,
+          title,
+          year,
+          genre,
+          img,
+          description,
+          user.username)
+          .subscribe({
+            next: () => {
+              this.router.navigate([`/films/${filmId}/details`]);
+            },
+            error: (err) => {
+              this.editForm.reset();
+              this.formService.markFormGroupTouched(this.editForm);
+            }
+          });
       } else {
-        this.markFormGroupTouched();
+        this.formService.markFormGroupTouched(this.editForm);
       }
-      }
+    }
   }
 
   onCancel(): void {
-     const filmId = this.getFilmIdFromRoute();
+    const filmId = this.getFilmIdFromRoute();
 
-     this.router.navigate([`/films/${filmId}/details`]);
-  }
-
-  private markFormGroupTouched(): void {
-    Object.keys(this.editForm.controls).forEach(key => {
-      const control = this.editForm.get(key);
-      control?.markAsTouched();
-    })
+    this.router.navigate([`/films/${filmId}/details`]);
   }
 
   private getFilmIdFromRoute(): string | null {

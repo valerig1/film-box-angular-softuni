@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService, FilmsService } from '../../../core/services';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthService, FilmsService, FormService } from '../../../core/services';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -13,8 +13,8 @@ import { CommonModule } from '@angular/common';
 export class CreateFilm {
   protected filmService = inject(FilmsService);
   protected authService = inject(AuthService);
+  protected formService = inject(FormService);
   private router = inject(Router);
-  private formBuilder = inject(FormBuilder);
 
   createForm: FormGroup;
 
@@ -25,13 +25,7 @@ export class CreateFilm {
   ];
 
   constructor() {
-    this.createForm = this.formBuilder.group({
-      title: ['', [Validators.required, Validators.minLength(2)]],
-      year: ['', [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())]],
-      genre: ['', [Validators.required]],
-      img: ['', [Validators.required]],
-      description: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(600)]]
-    })
+    this.createForm = this.formService.createFilmForm();
   }
 
   get title(): AbstractControl<any, any> | null {
@@ -96,7 +90,7 @@ export class CreateFilm {
     }
 
     if (this.year?.errors?.['max']) {
-      return 'Year cannot be later than 2026!'
+      return `Year cannot be later than ${this.formService.maxYear}!`
     }
 
     return '';
@@ -126,7 +120,7 @@ export class CreateFilm {
     if (this.description?.errors?.['minlength']) {
       return 'Description must be at least 5 characters!'
     }
-    
+
     if (this.description?.errors?.['maxlength']) {
       return 'Description must not exceed 600 characters!'
     }
@@ -144,24 +138,24 @@ export class CreateFilm {
         return;
       }
 
-      this.filmService.createFilm(title, year, genre, img, description, user.username).subscribe({
-        next: () => {
-          this.router.navigate(['/home']);
-        },
-        error: (err) => {
-          this.createForm.reset();
-          this.markFormGroupTouched();
-        }
-      });
+      this.filmService.createFilm(
+        title,
+        year,
+        genre,
+        img,
+        description,
+        user.username)
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/home']);
+          },
+          error: (err) => {
+            this.createForm.reset();
+            this.formService.markFormGroupTouched(this.createForm);
+          }
+        });
     } else {
-      this.markFormGroupTouched();
+      this.formService.markFormGroupTouched(this.createForm);
     }
-  }
-
-  private markFormGroupTouched(): void {
-    Object.keys(this.createForm.controls).forEach(key => {
-      const control = this.createForm.get(key);
-      control?.markAsTouched();
-    })
   }
 }

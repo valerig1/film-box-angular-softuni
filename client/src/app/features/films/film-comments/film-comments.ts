@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService, CommentsService } from '../../../core/services';
+import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AuthService, CommentsService, FormService } from '../../../core/services';
 import { Comment } from '../../../models';
 
 @Component({
@@ -16,17 +16,15 @@ export class FilmComments implements OnInit {
 
   protected commentsService = inject(CommentsService);
   protected authService = inject(AuthService);
+  protected formService = inject(FormService);
 
-  private formBuilder = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
 
   comments: Comment[] = [];
   commentForm: FormGroup;
 
   constructor() {
-    this.commentForm = this.formBuilder.group({
-      content: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(1000)]]
-    });
+    this.commentForm = this.formService.createCommentForm();
   }
 
   ngOnInit(): void {
@@ -95,18 +93,11 @@ export class FilmComments implements OnInit {
         },
         error: () => {
           this.commentForm.reset();
-          this.markFormGroupTouched();
+          this.formService.markFormGroupTouched(this.commentForm);
         }
       });
     } else {
-      this.markFormGroupTouched();
+      this.formService.markFormGroupTouched(this.commentForm);
     }
-  }
-
-  private markFormGroupTouched(): void {
-    Object.keys(this.commentForm.controls).forEach(key => {
-      const control = this.commentForm.get(key);
-      control?.markAsTouched();
-    });
   }
 }

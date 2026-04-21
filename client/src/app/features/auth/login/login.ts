@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../../core/services';
+import { AuthService, FormService } from '../../../core/services';
 import { Router, RouterLink } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -11,16 +11,13 @@ import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModu
 })
 export class Login {
   protected authService = inject(AuthService);
+  protected formService = inject(FormService);
   private router = inject(Router);
-  private formBuilder = inject(FormBuilder);
 
   loginForm: FormGroup;
 
   constructor() {
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(5)]]
-    })
+    this.loginForm = this.formService.createLoginForm();
   }
 
   get email(): AbstractControl<any, any> | null {
@@ -72,20 +69,12 @@ export class Login {
           this.router.navigate(['/home']);
         },
         error: (err) => {
-          this.loginForm.reset();   
-          this.markFormGroupTouched();
+          this.loginForm.reset();
+          this.formService.markFormGroupTouched(this.loginForm);
         }
       });
     } else {
-      this.markFormGroupTouched();
+      this.formService.markFormGroupTouched(this.loginForm);
     }
   }
-
-  private markFormGroupTouched(): void {
-    Object.keys(this.loginForm.controls).forEach(key => {
-      const control = this.loginForm.get(key);
-      control?.markAsTouched();
-    })
-  }
-
 }

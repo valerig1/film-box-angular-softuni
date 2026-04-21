@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services';
+import { AuthService, FormService } from '../../../core/services';
 
 @Component({
   selector: 'app-register',
@@ -10,21 +10,14 @@ import { AuthService } from '../../../core/services';
   styleUrl: './register.scss',
 })
 export class Register {
-  private authService = inject(AuthService);
+  protected authService = inject(AuthService);
+  protected formService = inject(FormService);
   private router = inject(Router);
-  private formBuilder = inject(FormBuilder);
 
   registerForm: FormGroup;
 
   constructor() {
-    this.registerForm = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(5)]],
-      email: ['', [Validators.required, Validators.email]],
-      passwords: this.formBuilder.group({
-        password: ['', [Validators.required, Validators.minLength(5)]],
-        rePassword: ['', [Validators.required, Validators.minLength(5)]]
-      }, { validators: this.passwordMatchValidator })
-    })
+    this.registerForm = this.formService.createRegisterForm();
   }
 
   get username(): AbstractControl<any, any> | null {
@@ -65,7 +58,11 @@ export class Register {
     }
 
     if (this.username?.errors?.['minlength']) {
-      return 'Username should have at least 5 characters!';
+      return 'Username must have at least 2 characters!';
+    }
+
+    if (this.username?.errors?.['maxlength']) {
+      return 'Username must not exceed 30 characters!';
     }
 
     return '';
@@ -129,38 +126,12 @@ export class Register {
             this.router.navigate(['/home']);
           },
           error: (err) => {
-            this.registerForm.reset(); 
-            this.markFormGroupTouched();
+            this.registerForm.reset();
+            this.formService.markFormGroupTouched(this.registerForm);
           }
         })
     } else {
-      this.markFormGroupTouched();
+      this.formService.markFormGroupTouched(this.registerForm);
     }
-  }
-
-  private markFormGroupTouched(): void {
-    Object.keys(this.registerForm.controls).forEach(key => {
-      const control = this.registerForm.get(key);
-
-      if (control instanceof FormGroup) {
-        Object.keys(control.controls).forEach(nestedKey => {
-          const nestedControl = control.get(nestedKey)
-          nestedControl?.markAllAsTouched();
-        })
-      } 
-      
-      control?.markAsTouched();
-    })
-  }
-
-  private passwordMatchValidator(passwordsControl: AbstractControl): ValidationErrors | null {
-    const password = passwordsControl.get('password');
-    const rePassword = passwordsControl.get('rePassword');
-
-    if (password && rePassword && password.value !== rePassword.value) {
-      return { passwordMismatch: true };
-    }
-
-    return null;
   }
 }
